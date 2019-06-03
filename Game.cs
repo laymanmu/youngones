@@ -19,8 +19,18 @@ namespace youngones {
                 InitConsole();
                 InitEntities();
             };
+            SadConsole.Game.OnUpdate = Update;
             SadConsole.Game.Instance.Run();
             SadConsole.Game.Instance.Dispose();
+        }
+
+        private void Update(GameTime time) {
+            if (Keyboard.IsReleased(Keyboard.ActionName.ToggleFullScreen)) {
+                SadConsole.Settings.ToggleFullScreen();
+            }
+            if (Keyboard.IsPressed(Keyboard.ActionName.MoveN)) {
+                player.Position += new Point(0, -1);
+            }
         }
 
         private void InitEntities() {
