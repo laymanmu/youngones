@@ -6,11 +6,13 @@ namespace youngones {
         public int Height { get; }
 
         private SadConsole.Console mainConsole;
-        private SadConsole.Entities.Entity player;
+        private TileMap tileMap;
+        private Mob player;
 
         public Game(int width, int height) {
             Width  = width;
             Height = height;
+            tileMap = new TileMap(10, 10);
         }
 
         public void Start() { 
@@ -34,7 +36,7 @@ namespace youngones {
         }
 
         private void InitEntities() {
-            player = new SadConsole.Entities.Entity(1, 1);
+            player = new Mob(tileMap);
             player.Animation.CurrentFrame[0].Glyph = '@';
             player.Animation.CurrentFrame[0].Foreground = Color.HotPink;
             player.Position = new Point(20, 10);
@@ -43,9 +45,6 @@ namespace youngones {
 
         private void InitConsole() {
             mainConsole = new SadConsole.Console(Width, Height);
-            //mainConsole.FillWithRandomGarbage();
-            mainConsole.Fill(new Rectangle(3, 3, 23, 3), Color.Violet, Color.Gray, 0, 0);
-            mainConsole.Print(4, 4, "hello");
             SadConsole.Global.CurrentScreen = mainConsole;
         }
     }
