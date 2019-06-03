@@ -5,16 +5,16 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace youngones {
-    public class Mob : Entity, IMob {
+    public class Mob : Entity {
 
-        private ITileMap tileMap;
+        private TileMap tileMap;
 
-        public Mob(ITileMap tileMap) : base(1,1) {
+        public Mob(TileMap tileMap) : base(1,1) {
             this.tileMap = tileMap;
         }
 
-        public bool MoveTowards(Point direction) {
-            Point dir = Helpers.ToDirection(direction);
+        public bool MoveTowards(Direction direction) {
+            Point dir = direction.ToPoint();
             Point pos = new Point(Position.X + dir.X, Position.Y + dir.Y);
             return MoveTo(pos); 
         }

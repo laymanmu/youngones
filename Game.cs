@@ -12,7 +12,15 @@ namespace youngones {
         public Game(int width, int height) {
             Width  = width;
             Height = height;
-            tileMap = new TileMap(10, 10);
+            tileMap = new TileMap(width, height);
+
+            for (int y=0; y<height; y++) {
+                string line = "";
+                for (int x=0; x<width; x++) {
+                    line += tileMap.GetTile(x, y).Glyph;
+                }
+                System.Console.WriteLine(line);
+            }
         }
 
         public void Start() { 
@@ -30,8 +38,50 @@ namespace youngones {
             if (Keyboard.IsReleased(Keyboard.ActionName.ToggleFullScreen)) {
                 SadConsole.Settings.ToggleFullScreen();
             }
-            if (Keyboard.IsPressed(Keyboard.ActionName.MoveN)) {
-                player.Position += new Point(0, -1);
+
+            var tookTurn = false;
+            var action   = Keyboard.GetPressedAction();
+
+            switch (action) {
+                case Keyboard.ActionName.MoveN:
+                    player.MoveTowards(Direction.N);
+                    tookTurn = true;
+                    break;
+                case Keyboard.ActionName.MoveNE:
+                    player.MoveTowards(Direction.NE);
+                    tookTurn = true;
+                    break;
+                case Keyboard.ActionName.MoveE:
+                    player.MoveTowards(Direction.E);
+                    tookTurn = true;
+                    break;
+                case Keyboard.ActionName.MoveSE:
+                    player.MoveTowards(Direction.SE);
+                    tookTurn = true;
+                    break;
+                case Keyboard.ActionName.MoveS:
+                    player.MoveTowards(Direction.S);
+                    tookTurn = true;
+                    break;
+                case Keyboard.ActionName.MoveSW:
+                    player.MoveTowards(Direction.SW);
+                    tookTurn = true;
+                    break;
+                case Keyboard.ActionName.MoveW:
+                    player.MoveTowards(Direction.W);
+                    tookTurn = true;
+                    break;
+                case Keyboard.ActionName.MoveNW:
+                    player.MoveTowards(Direction.NW);
+                    tookTurn = true;
+                    break;
+                case Keyboard.ActionName.Rest:
+                    tookTurn = true;
+                    break;
+            }
+
+            if (tookTurn) {
+                Log("tick");
             }
         }
 
@@ -46,6 +96,10 @@ namespace youngones {
         private void InitConsole() {
             mainConsole = new SadConsole.Console(Width, Height);
             SadConsole.Global.CurrentScreen = mainConsole;
+        }
+
+        public void Log(string message) {
+            System.Console.WriteLine(message);
         }
     }
 }

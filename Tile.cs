@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace youngones {
-    public class Tile : ITile {
+    public class Tile {
         public Tile(String name, String glyph, bool isBlocked) {
             Name      = name;
             Glyph     = glyph;

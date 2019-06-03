@@ -6,20 +6,22 @@ using System.Text;
 namespace youngones {
     public class Keyboard {
 
-        public enum ActionName { None, ToggleFullScreen, MoveN, MoveS, MoveE, MoveW, MoveNE, MoveSE, MoveSW, MoveNW };
+        public enum ActionName { None, ToggleFullScreen, MoveN, MoveS, MoveE, MoveW, MoveNE, MoveSE, MoveSW, MoveNW, Rest };
 
         public static readonly Dictionary<ActionName,Keys[]> Controls = new Dictionary<ActionName, Keys[]> {
             {ActionName.ToggleFullScreen,  new Keys[]{Keys.F5 }},
 
-            {ActionName.MoveN,  new Keys[]{Keys.NumPad8,Keys.Up}},
-            {ActionName.MoveS,  new Keys[]{Keys.NumPad2,Keys.Down}},
-            {ActionName.MoveE,  new Keys[]{Keys.NumPad6,Keys.Right}},
-            {ActionName.MoveW,  new Keys[]{Keys.NumPad4,Keys.Left}},
+            {ActionName.MoveN, new Keys[]{Keys.NumPad8,Keys.Up}},
+            {ActionName.MoveS, new Keys[]{Keys.NumPad2,Keys.Down}},
+            {ActionName.MoveE, new Keys[]{Keys.NumPad6,Keys.Right}},
+            {ActionName.MoveW, new Keys[]{Keys.NumPad4,Keys.Left}},
 
-            {ActionName.MoveNE,  new Keys[]{Keys.NumPad9}},
-            {ActionName.MoveSE,  new Keys[]{Keys.NumPad3}},
-            {ActionName.MoveSW,  new Keys[]{Keys.NumPad1}},
-            {ActionName.MoveNW,  new Keys[]{Keys.NumPad7}},
+            {ActionName.MoveNE, new Keys[]{Keys.NumPad9}},
+            {ActionName.MoveSE, new Keys[]{Keys.NumPad3}},
+            {ActionName.MoveSW, new Keys[]{Keys.NumPad1}},
+            {ActionName.MoveNW, new Keys[]{Keys.NumPad7}},
+
+            {ActionName.Rest, new Keys[]{Keys.NumPad5}},
         };
 
         public static ActionName GetActionName(Keys key) {
@@ -51,5 +53,22 @@ namespace youngones {
             return false;
         }
 
+        public static List<ActionName> GetPressedActions() {
+            List<ActionName> pressedActions = new List<ActionName>();
+            foreach (var actionName in Controls.Keys) {
+                if (IsPressed(actionName)) {
+                    pressedActions.Add(actionName);
+                }
+            }
+            return pressedActions;
+        }
+
+        public static ActionName GetPressedAction() {
+            var pressedActions = GetPressedActions();
+            if (pressedActions.Count > 0) {
+                return pressedActions[0];
+            }
+            return ActionName.None;
+        }
     }
 }
