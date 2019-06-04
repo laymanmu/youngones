@@ -1,16 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace youngones {
     public class Mob : Entity {
+        public TileMap TileMap { get; set; }
 
-        private TileMap tileMap;
+        public Mob() : base(1,1) {
+        }
 
         public Mob(TileMap tileMap) : base(1,1) {
-            this.tileMap = tileMap;
+            TileMap = tileMap;
         }
 
         public bool MoveTowards(Direction direction) {
@@ -20,7 +19,7 @@ namespace youngones {
         }
 
         public bool MoveTo(Point position) {
-            if (tileMap.IsBlocked(position)) {
+            if (TileMap.IsBlocked(position)) {
                 return false;
             }
             Position = position;
