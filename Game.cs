@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using SadConsole;
+using System;
 
 namespace youngones {
     public class Game {
@@ -7,6 +8,7 @@ namespace youngones {
         public int Height { get; }
 
         private SadConsole.ScrollingConsole mainConsole;
+        private SadConsole.Font mainFont;
         private TileMap tileMap;
         private Player  player;
         private Rectangle viewPort;
@@ -26,7 +28,7 @@ namespace youngones {
 
         private void Initialize() {
             InitTileMap();
-            InitConsole();
+            InitConsoles();
             InitPlayer();
         }
 
@@ -34,25 +36,24 @@ namespace youngones {
             if (Keyboard.IsReleased(Keyboard.ActionName.ToggleFullScreen)) {
                 SadConsole.Settings.ToggleFullScreen();
             }
-
             var action   = Keyboard.GetPressedAction();
             var tookTurn = player.TakeAction(action);
-
             if (tookTurn) {
-                Log("tick");
+                Log($"tick | player at: {player.Position}");
             }
             mainConsole.CenterViewPortOnPoint(player.Position);
         }
 
-        private void InitTileMap() {
-            tileMap = new TileMap(Width*2, Height*2);
-            System.Console.WriteLine(tileMap.ToText());
+        private void InitConsoles() {
+            viewPort    = new Rectangle(0, 0, 40, 20);
+            mainFont    = SadConsole.Global.FontDefault.Master.GetFont(Font.FontSizes.One);
+            mainConsole = new SadConsole.ScrollingConsole(tileMap.Width, tileMap.Height, mainFont, viewPort, tileMap.Tiles);
+            SadConsole.Global.CurrentScreen = mainConsole;
         }
 
-        private void InitConsole() {
-            viewPort    = new Rectangle(0, 0, Width, Height);
-            mainConsole = new SadConsole.ScrollingConsole(tileMap.Width, tileMap.Height, SadConsole.Global.FontDefault, viewPort, tileMap.Tiles);
-            SadConsole.Global.CurrentScreen = mainConsole;
+        private void InitTileMap() {
+            var seed = (int)DateTime.Now.ToBinary();
+            tileMap  = new MapMaker(seed).MakeRooms(100, 100, 100, 8, 14);
         }
 
         private void InitPlayer() { 
@@ -60,8 +61,9 @@ namespace youngones {
             player.Animation.CurrentFrame[0].Glyph = '@';
             player.Animation.CurrentFrame[0].Foreground = Color.HotPink;
             player.Animation.CurrentFrame[0].Background = Color.Transparent;
-            player.Position = new Point(3, 3);
+            player.Position = tileMap.GetRandomUnblockedPosition(); 
             player.Components.Add(new SadConsole.Components.EntityViewSyncComponent());
+            player.Font = mainFont;
             mainConsole.Children.Add(player);
         }
 

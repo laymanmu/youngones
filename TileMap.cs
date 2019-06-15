@@ -5,7 +5,6 @@ using System.Text;
 
 namespace youngones {
     public class TileMap { 
-
         public List<Mob> Mobs { get; }
         public int Width { get; }
         public int Height { get; }
@@ -20,11 +19,7 @@ namespace youngones {
             nullTile = Tile.CreateNull();
             for (int y=0; y<Height; y++) {
                 for (int x=0; x<Width; x++) {
-                    if (x==0 || x==Width-1 || y==0 || y==Height-1) {
-                        SetTile(x, y, Tile.CreateWall());
-                    } else {
-                        SetTile(x, y, Tile.CreateFloor());
-                    }
+                    SetTile(x, y, Tile.CreateWall());
                 }
             }
         }
@@ -74,6 +69,28 @@ namespace youngones {
         }
         public bool IsInBounds(Point position) {
             return IsInBounds(position.X, position.Y);
+        }
+
+        public Point GetRandomUnblockedPosition() {
+            Random random = new Random();
+            int maxTries  = 99999;
+            for (int i=0; i<maxTries; i++) {
+                int x = random.Next(0, Width-1);
+                int y = random.Next(0, Height-1);
+                if (!IsBlocked(x, y)) {
+                    return new Point(x, y);
+                }
+            }
+
+            for (int x=0; x<Width; x++) {
+                for (int y = 0; y < Height; y++) {
+                    if (!IsBlocked(x, y)) {
+                        return new Point(x, y);
+                    }
+                }
+            }
+
+            return new Point(-1, -1);
         }
     }
 }
